@@ -87,7 +87,7 @@ public:
 	wxString filename;
 	std::string h_part;
 	std::string l_part;	
-	int prev_rand = 0;
+	std::vector<int> prev_rand;
 	
 private:
     void OnHello(wxCommandEvent& event);
@@ -323,21 +323,27 @@ void MainFrame::Parse_Random_Line()
 	int line_count = get_line_count(fs);
 	fs.close();
 	fs.open(filename, std::fstream::in | std::fstream::out);
-	//std::cout<<line_count<<std::endl;
+	
 	if(line_count > 1)
 	{
-		if(prev_rand != 0)
+		if(prev_rand.size() == line_count)
 		{
-			while(rand_index == prev_rand)
-			rand_index = rand() % line_count + 1;
+			std::cout<<"Info: Run out of indexes. Restarting randomizer."<<std::endl;
+			prev_rand.clear();
 		}
-		else
+		generate_new_rand:
+		rand_index = rand() % line_count + 1;
+		for(int i = 0; i<prev_rand.size(); i++)
 		{
-			rand_index = rand() % line_count + 1;
+			if(prev_rand[i] == rand_index)
+			{
+				goto generate_new_rand;
+			}
 		}
 	}
+	
 	std::cout<<"Random Index: "<<rand_index<<std::endl;
-	prev_rand = rand_index;
+	prev_rand.push_back(rand_index);
 	while (getline(fs,line))
     {
 	//	cout << line << '\n';
@@ -366,7 +372,7 @@ void MainFrame::Parse_Random_Line()
 	if(h_part.empty() || l_part.empty())
 	{
 		std::cout<<"Failed to find the target line with random index:  "<<rand_index<<std::endl;
-		debug_pause();
+		Parse_Random_Line();
 	}	
 //	std::cout<<wxString::FromUTF8(h_part)<<std::endl;
 //	std::cout<<wxString::FromUTF8(l_part)<<std::endl;
