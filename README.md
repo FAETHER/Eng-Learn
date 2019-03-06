@@ -14,4 +14,4 @@ Goals:
 
 # How It Looks ?
 
-![A Snapshot](snapshot.png?raw=true "Snapshot")
+![A Snapshot](snapshot.PNG?raw=true "Snapshot")
