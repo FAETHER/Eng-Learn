@@ -11,3 +11,7 @@ Goals:
 4. Hopefully help you to learn new human language.
 
 5. This program is not for me, one of my mates. 
+
+# How It Looks ?
+
+![A Snapshot](snapshot.png?raw=true "Snapshot")
